@@ -22,7 +22,7 @@ df = pd.DataFrame(data)
 print("Columns in the DataFrame:", df.columns)
 print("First few rows of the DataFrame:\n", df.head())
 
-# Rename columns and convert 'ds' to datetime format
+# Rename columns and convert 'DATE' to datetime format
 df.rename(columns={'DATE': 'ds', 'PRICE': 'y'}, inplace=True)
 df['ds'] = pd.to_datetime(df['ds'])
 
@@ -36,7 +36,7 @@ df2 = df.between_time('06:00', '19:00')
 print("First few rows after filtering:\n", df2.head())
 
 # Fit the ARIMA model on the dataset
-order = (1,1,1)  # Example order; (p, d, q) should be chosen based on data
+order = (5, 1, 1)  # Example order; (p, d, q) should be chosen based on data
 model = ARIMA(df2['y'], order=order)
 model_fit = model.fit()
 
@@ -44,7 +44,8 @@ model_fit = model.fit()
 print(model_fit.summary())
 
 # Create a dataframe with future dates for forecasting
-future_dates = pd.date_range(start=df2.index[-1], periods=150, freq='D')
+forecast_periods = 2 * 30 * 12  # Approximation for 2 months, 30 days/month * 12 hours/day
+future_dates = pd.date_range(start=df2.index[-1] + pd.Timedelta(hours=1), periods=forecast_periods, freq='H')
 future_dates = future_dates[future_dates.indexer_between_time('07:00', '19:00')]
 
 # Make the forecast
