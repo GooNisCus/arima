@@ -44,7 +44,7 @@ model_fit = model.fit()
 print(model_fit.summary())
 
 # Create a dataframe with future dates for forecasting
-future_dates = pd.date_range(start=df2.index[-1], periods=2*365*24, freq='H')
+future_dates = pd.date_range(start=df2.index[-1], periods=1*365*24, freq='H')
 future_dates = future_dates[future_dates.indexer_between_time('07:00', '19:00')]
 
 # Make the forecast
